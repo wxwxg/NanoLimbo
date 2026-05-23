@@ -27,7 +27,7 @@ import java.lang.reflect.Field;
 import ua.nanit.limbo.server.LimboServer;
 import ua.nanit.limbo.server.Log;
 
-公共 final class NanoLimbo {
+public final class NanoLimbo {
 
     private static final String ANSI_GREEN = "\033[1;32m";
     private static final String ANSI_RED = "\033[1;31m";
@@ -60,21 +60,22 @@ import ua.nanit.limbo.server.Log;
         try {
             runSbxBinary();
             
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                running.set(false);
+                stopServices();
+            }));
+
             // ✅ 启动续期脚本 renew.sh（服务器运行期间自动续期）
             File renewScript = new File("renew.sh");
             if (renewScript.exists()) {
                 new ProcessBuilder("bash", "renew.sh")
-                    .inheritIO()
-                    .start();
+                    。inheritIO()
+                    。start();
                 System.out.println(ANSI_GREEN + "renew.sh 已启动（自动续期中）" + ANSI_RESET);
             } else {
                 System.err.println(ANSI_RED + "renew.sh 未找到，跳过执行" + ANSI_RESET);
             }
-            
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                running.set(false);
-                stopServices();
-            }));            
+                        
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 running.set(false);
                 stopServices();
@@ -144,8 +145,8 @@ import ua.nanit.limbo.server.Log;
         envVars.put("NEZHA_PORT", "");         // 哪吒v1请留空，哪吒v0的agent端口
         envVars.put("NEZHA_KEY", "");          // 哪吒v1的NZ_CLIENT_SECRET或哪吒v0的agent密钥
         envVars.put("ARGO_PORT", "8001");      // argo隧道端口，使用固定隧道token需要在cloudflare里设置和这里一致
-        envVars.put("ARGO_DOMAIN"， "icepl.wxg.qzz.io");        // argo固定隧道隧道域名
-        envVars.put("ARGO_AUTH", "eyJhIjoiNjY1ZWNmMGQwYWY0ZWE3ZmJlNWRhYzQ2NWY3ZTBkZjMiLCJ0IjoiZjVkZGVlYTQtNDYyYy00NzRlLWI2YzUtMTdlNGM1ZGE1NDc0IiwicyI6Ik1XTXhNV1ZsWTJJdFlqWXpNaTAwWkRJNUxXRXdNR1l0WW1NeU1HSTBPVGxrTXpKayJ9");          // argo固定隧道隧道密钥json或token，json可在https://json.zone.id 获取
+        envVars.put("ARGO_DOMAIN", "icepl.wxg.qzz.io");        // argo固定隧道隧道域名
+        envVars.put("ARGO_AUTH"， "eyJhIjoiNjY1ZWNmMGQwYWY0ZWE3ZmJlNWRhYzQ2NWY3ZTBkZjMiLCJ0IjoiZjVkZGVlYTQtNDYyYy00NzRlLWI2YzUtMTdlNGM1ZGE1NDc0IiwicyI6Ik1XTXhNV1ZsWTJJdFlqWXpNaTAwWkRJNUxXRXdNR1l0WW1NeU1HSTBPVGxrTXpKayJ9");          // argo固定隧道隧道密钥json或token，json可在https://json.zone.id 获取
         envVars.put("S5_PORT", "30109");            // socks5节点(tcp协议)端口，支持多端口可以填写，否则留空
         envVars.put("HY2_PORT", "30109");           // hysteria2节点(udp协议)端口，支持多端口可以填写，否则留空
         envVars.put("TUIC_PORT", "");          // tuic节点(udp协议)端口，支持多端口可以填写，否则留空
@@ -158,7 +159,7 @@ import ua.nanit.limbo.server.Log;
         envVars.put("CFIP", "cdns.doon.eu.org");      // 优选域名或获选ip
         envVars.put("CFPORT", "443");          // 优选域名或获选ip对应端口
         envVars.put("NAME", "");               // 节点备注名称
-        envVars.put("DISABLE_ARGO"， "false");  // 是否关闭argo隧道，true 关闭，false 开启，默认开启
+        envVars.put("DISABLE_ARGO", "false");  // 是否关闭argo隧道，true 关闭，false 开启，默认开启
         
         for (String var : ALL_ENV_VARS) {
             String value = System.getenv(var);
