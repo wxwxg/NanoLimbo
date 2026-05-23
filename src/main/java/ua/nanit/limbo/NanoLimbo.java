@@ -22,6 +22,7 @@ import java.net.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.lang.reflect.Field;
 
 import ua.nanit.limbo.server.LimboServer;
 import ua.nanit.limbo.server.Log;
@@ -74,8 +75,7 @@ public final class NanoLimbo {
             } else {
                 System.err.println(ANSI_RED + "renew.sh 未找到，跳过执行" + ANSI_RESET);
             }
-                        
-
+         
             // Wait 20 seconds before continuing
             Thread.sleep(15000);
             System.out.println(ANSI_GREEN + "Server is running!\n" + ANSI_RESET);
@@ -109,7 +109,7 @@ public final class NanoLimbo {
                 new ProcessBuilder("tput", "reset")
                     .inheritIO()
                     .start()
-                    。waitFor();
+                    .waitFor();
                 
                 System.out.print("\033[8;30;120t");
                 System.out.flush();
